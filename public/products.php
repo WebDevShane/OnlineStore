@@ -18,9 +18,16 @@ $products = get_products();
 
                     <img src="<?php echo $product['product_image']; ?>" class="rounded">
 
-                    <blockquote class="pet-details text-white">
+                    <blockquote class="pet-details text-white pt-1">
                         <span class="badge bg-primary"><?php echo $product['product_brand']; ?></span>
                         <br><small>Price: €<?php echo $product['product_price']; ?></small>
+                        <?php
+                        if ($product['product_stock'] >= 1) {
+                            echo '<span class="badge bg-success">In Stock</span>';
+                        } else {
+                            echo '<span class="badge bg-danger">Out of Stock</span>';
+                        }
+                        ?>
                     </blockquote>
 
                     <p class="lh-sm py-2">
