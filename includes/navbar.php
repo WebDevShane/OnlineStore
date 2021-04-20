@@ -15,8 +15,8 @@
                 </li>
                 <li class="nav-item">
                     <?php
-                    if ($username != null) {
-                        echo '<a class="nav-link" href="#" tabindex="-1">Account</a>';
+                    if ($username != "notset") {
+                        echo '<a class="nav-link" href="../public/account.php" tabindex="-1">Account</a>';
                     } else {
                         echo '<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Account</a>';
                     }
@@ -26,7 +26,7 @@
                     <a class="nav-link" href="#">Contact</a>
                 </li>
                 <?php
-                if ($username != null) {
+                if ($username != "notset") {
                     echo '<a class="btn btn-outline-primary text-nowrap my-sm-2" href="logout.php">Log Out</a>';
                 } else {
                     echo '<a class="btn btn-outline-primary text-nowrap my-sm-2" href="login.php">Sign In</a>';

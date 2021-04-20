@@ -51,10 +51,11 @@ require "../lib/functions.php";
                             $statement->bindParam(':pass', $pass, PDO::PARAM_STR);
                             $statement->execute();
 
-                            $result = $statement->fetchAll();
+                            $result = $statement->fetch(PDO::FETCH_ASSOC);
 
                             if ($result > 0) {
-                                $_SESSION['Username'] = $result;
+                                $arr = array_values($result);
+                                $_SESSION['Username'] = $arr[0];
                                 $_SESSION['Active'] = true;
                                 header("location:index.php");
                                 exit;

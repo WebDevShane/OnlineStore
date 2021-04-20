@@ -1,8 +1,9 @@
 <?php session_start();
+
 if (isset($_SESSION['Username'])) {
     $username = $_SESSION['Username'];
 } else {
-    $username = "";
+    $username = "notset";
 }
 ?>
 <!doctype html>

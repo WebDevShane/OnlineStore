@@ -34,3 +34,21 @@ function get_products()
         echo $sql . "<br>" . $error->getMessage();
     }
 }
+
+function get_customer()
+{
+    require "../data/config.php";
+    try {
+        $connection = new PDO($dsn, $username, $password, $options);
+
+        $sql = 'SELECT * FROM customers';
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute();
+        $customer = $stmt->fetchAll();
+
+        return $customer;
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
