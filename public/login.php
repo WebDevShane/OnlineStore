@@ -56,7 +56,7 @@ require "../lib/functions.php";
                             if ($result > 0) {
                                 $arr = array_values($result);
                                 $_SESSION['Username'] = $arr[0];
-                                $_SESSION['Active'] = true;
+                                $_SESSION['Email'] = $email;
                                 header("location:index.php");
                                 exit;
                             } else {

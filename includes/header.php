@@ -5,6 +5,10 @@ if (isset($_SESSION['Username'])) {
 } else {
     $account_name = "notset";
 }
+if (isset($_SESSION['Email'])) {
+    $account_details = $_SESSION['Email'];
+}
+
 ?>
 <!doctype html>
 <html lang="en">

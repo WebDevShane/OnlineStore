@@ -35,15 +35,17 @@ function get_products()
     }
 }
 
-function get_customer()
+function get_customer($account_email)
 {
     require "../data/config.php";
     try {
         $connection = new PDO($dsn, $username, $password, $options);
 
-        $sql = 'SELECT * FROM customers';
+        $sql = 'SELECT * FROM customers WHERE email = :acc_email';
 
+        $acc_email = $account_email;
         $stmt = $connection->prepare($sql);
+        $stmt->bindParam(':acc_email', $acc_email, PDO::PARAM_STR);
         $stmt->execute();
         $customer = $stmt->fetchAll();
 
