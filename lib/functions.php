@@ -1,5 +1,7 @@
 <?php
 
+
+
 if (empty($_SESSION['csrf'])) {
     if (function_exists('random_bytes')) {
         $_SESSION['csrf'] = bin2hex(random_bytes(32));
@@ -46,6 +48,28 @@ function get_customer($account_email)
         $acc_email = $account_email;
         $stmt = $connection->prepare($sql);
         $stmt->bindParam(':acc_email', $acc_email, PDO::PARAM_STR);
+        $stmt->execute();
+        $customer = $stmt->fetchAll();
+
+        return $customer;
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
+
+function get_orders($order_email)
+{
+    require "../data/config.php";
+    try {
+        $connection = new PDO($dsn, $username, $password, $options);
+
+        $sql = 'SELECT orders.*, products.product_name, products.product_fullDesc 
+        FROM orders JOIN products WHERE orders.product_id = products.product_id 
+        AND orders.order_email = :order_email';
+
+        $orders = $order_email;
+        $stmt = $connection->prepare($sql);
+        $stmt->bindParam(':order_email', $orders, PDO::PARAM_STR);
         $stmt->execute();
         $customer = $stmt->fetchAll();
 

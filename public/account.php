@@ -3,6 +3,7 @@ $title = "Gameware Account";
 require_once "../includes/header.php";
 require "../lib/functions.php";
 $account_details = get_customer($_SESSION['Email']);
+$all_orders = get_orders($_SESSION['Email']);
 ?>
 <?php require_once "../includes/navbar.php"; ?>
 <main>
@@ -45,8 +46,53 @@ $account_details = get_customer($_SESSION['Email']);
                 <h3 class="text-white">
                     Order Details
                 </h3>
+                <hr class="featurette-divider">
+                <form method="post">
+                    <input class="btn btn-outline-primary" type="submit" value="Click Here" name="submit1" onclick="location.href='#scroll';">
+                </form>
             </div>
         </div>
+
+        <div id="scroll" class="table-responsive">
+            <?php if (isset($_POST['submit1'])) {
+                if ($all_orders > 0) { ?>
+
+                    <table class="table table-dark table-striped table-sm">
+                        <caption>Order Details</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Order #</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Product Desc</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Shipping Address</th>
+                                <th scope="col">Shipping Address</th>
+                                <th scope="col">Order DTG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_orders as $row) : ?>
+                                <tr>
+                                    <td><?php echo escape($row["order_id"]); ?></td>
+                                    <td><?php echo escape($row["product_name"]); ?></td>
+                                    <td><?php echo escape($row["product_fullDesc"]); ?></td>
+                                    <td><?php echo escape($row["order_qty"]); ?></td>
+                                    <td><?php echo escape($row["order_amount"]); ?></td>
+                                    <td><?php echo escape($row["order_ship_address"]); ?></td>
+                                    <td><?php echo escape($row["order_ship_address2"]); ?></td>
+                                    <td><?php echo escape($row["order_date"]); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php } else { ?>
+                    <blockquote>No orders found for <?php echo escape($_SESSION['Username']); ?>.</blockquote>
+
+            <?php }
+            } ?>
+        </div>
+
 
     </div>
 
