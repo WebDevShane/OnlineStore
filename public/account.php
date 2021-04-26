@@ -42,6 +42,10 @@ if (isset($_POST['update'])) {
     }
 }
 
+if (isset($_POST['delete'])) {
+    delete_account();
+    header("location:logout.php");
+}
 
 ?>
 <?php require_once "../includes/navbar.php"; ?>
@@ -110,14 +114,13 @@ if (isset($_POST['update'])) {
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" name="update" class="btn btn-primary">Update</button>
                                 </div>
-                                <?php if (isset($_POST['update']) && $statement) { ?>
-                                    > <?php echo '<div class="alert alert-success" role="alert"> Succesfully Registered</div>' ?>
-                                <?php } ?>
-
                             </div>
                         </div>
                     </div>
                 </form>
+                <?php if (isset($_POST['update']) && $statement) { ?>
+                    > <?php echo '<div class="alert alert-success" role="alert">Acoount Updated</div>' ?>
+                <?php } ?>
                 <hr class="featurette-divider">
                 <?php foreach ($account_details as $details) { ?>
                     <?php $_SESSION['id'] = escape($details['customer_id']); ?>
@@ -137,7 +140,27 @@ if (isset($_POST['update'])) {
                     <h5 class="text-muted"><?php echo $details['country'] ?></h5>
                     <h4 class="text-white mb-0">Eircode/Post Code</h4>
                     <h5 class="text-muted"><?php echo $details['eircode'] ?></h5>
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal2">Delete Account</button>
                 <?php } ?>
+                <form method="post">
+                    <div class="modal" id="modal2" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete Account</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-dark">Are you sure you want to delete your account?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" name="delete" class="btn btn-primary">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <hr class="featurette-divider">
             </div>
             <div class="col-lg-4">
@@ -153,7 +176,7 @@ if (isset($_POST['update'])) {
 
         <div id="scroll" class="table-responsive">
             <?php if (isset($_POST['submit1'])) {
-                if ($all_orders > 0) { ?>
+                if ($all_orders >= 1) { ?>
 
                     <table class="table table-dark table-striped table-sm">
                         <caption>Order Details</caption>
@@ -185,7 +208,7 @@ if (isset($_POST['update'])) {
                         </tbody>
                     </table>
                 <?php } else { ?>
-                    <blockquote>No orders found for <?php echo escape($_SESSION['Username']); ?>.</blockquote>
+                    <blockquote class="text-white">No orders found for <?php echo escape($_SESSION['Username']); ?>.</blockquote>
 
             <?php }
             } ?>

@@ -78,3 +78,21 @@ function get_orders($order_email)
         echo $sql . "<br>" . $error->getMessage();
     }
 }
+
+function delete_account()
+{
+    require "../data/config.php";
+    try {
+        $connection = new PDO($dsn, $username, $password, $options);
+
+        $userId = $_SESSION['id'];
+        $sql = 'DELETE FROM customers WHERE customer_id = :userId';
+
+
+        $stmt = $connection->prepare($sql);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+        $stmt->execute();
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
