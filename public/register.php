@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
 <main>
     <div class="container p-4">
         <?php if (isset($_POST['submit']) && $statement) { ?>
-            > <?php echo '<div class="alert alert-success" role="alert"> Succesfully added</div>' ?>
+            > <?php echo '<div class="alert alert-success" role="alert"> Succesfully Registered</div>' ?>
         <?php } ?>
         <hr class="featurette-divider">
         <form method="post" class="row g-4">

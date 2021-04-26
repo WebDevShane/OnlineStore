@@ -13,14 +13,14 @@ $products = get_products();
             <?php foreach ($products as $product) { ?>
                 <div class="col-lg-4 my-2 text-center">
                     <h4 class="text-white text-uppercase">
-                        <?php echo $product['product_name']; ?>
+                        <?php echo escape($product['product_name']); ?>
                     </h4>
 
                     <img src="<?php echo $product['product_image']; ?>" class="rounded">
 
                     <blockquote class="pet-details text-white pt-1">
-                        <span class="badge bg-primary"><?php echo $product['product_brand']; ?></span>
-                        <br><small>Price: €<?php echo $product['product_price']; ?></small>
+                        <span class="badge bg-primary"><?php echo escape($product['product_brand']); ?></span>
+                        <br><small>Price: €<?php echo escape($product['product_price']); ?></small>
                         <?php
                         if ($product['product_stock'] >= 1) {
                             echo '<span class="badge bg-success">In Stock</span>';
@@ -31,7 +31,7 @@ $products = get_products();
                     </blockquote>
 
                     <p class="lh-sm py-2">
-                        <?php echo $product['product_fullDesc']; ?>
+                        <?php echo escape($product['product_fullDesc']); ?>
                     </p>
                     <a class="btn btn-outline-primary text-nowrap my-sm-2" href="#">Add to cart</a>
                 </div>

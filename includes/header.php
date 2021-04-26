@@ -6,7 +6,7 @@ if (isset($_SESSION['Username'])) {
     $account_name = "notset";
 }
 if (isset($_SESSION['Email'])) {
-    $account_details = $_SESSION['Email'];
+    $account = $_SESSION['Email'];
 }
 
 ?>

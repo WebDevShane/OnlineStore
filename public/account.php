@@ -2,8 +2,47 @@
 $title = "Gameware Account";
 require_once "../includes/header.php";
 require "../lib/functions.php";
+require "../data/config.php";
 $account_details = get_customer($_SESSION['Email']);
 $all_orders = get_orders($_SESSION['Email']);
+
+if (isset($_POST['update'])) {
+    try {
+        $connection = new PDO($dsn, $username, $password, $options);
+
+        $user_update = [
+            'firstname'     => $_POST['firstname'],
+            'lastname'      => $_POST['lastname'],
+            'email'         => $_POST['email'],
+            'address1'      => $_POST['address1'],
+            'address2'      => $_POST['address2'],
+            'city'          => $_POST['city'],
+            'country'       => $_POST['country'],
+            'eircode'       => $_POST['eircode'],
+            'userId'        => $_SESSION['id']
+        ];
+
+        $sql = 'UPDATE customers 
+    SET firstname = :firstname, 
+        lastname  = :lastname, 
+        email     = :email, 
+        address1  = :address1,
+        address2  = :address2,
+        city      = :city,
+        country   = :country,
+        eircode   = :eircode 
+    WHERE customer_id   = :userId';
+
+
+        $statement = $connection->prepare($sql);
+        // $statement->bindParam(':session_email', $acc_email, PDO::PARAM_STR);
+        $statement->execute($user_update);
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
+
+
 ?>
 <?php require_once "../includes/navbar.php"; ?>
 <main>
@@ -19,10 +58,69 @@ $all_orders = get_orders($_SESSION['Email']);
         <div class="row mt-4 justify-content-between">
             <div class="col-lg-4">
                 <h3 class="text-white">
-                    Account Details
+                    Account Details <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit Details</button>
                 </h3>
+                <form method="post">
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Edit Account details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="mb-3">
+                                        <label for="firstname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" name="firstname" id="firstname">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" name="lastname" id="lastname">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address1" class="form-label">Address</label>
+                                        <input type="text" class="form-control" name="address1" id="address1" placeholder="Apartment, studio, or floor">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address2" class="form-label">Address 2</label>
+                                        <input type="text" class="form-control" name="address2" id="address2" placeholder="1234 Main St...">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" name="city" id="city">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <input type="text" class="form-control" name="country" id="country">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="eircode" class="form-label">Zip/Eircode</label>
+                                        <input type="text" class="form-control" name="eircode" id="eircode">
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" name="update" class="btn btn-primary">Update</button>
+                                </div>
+                                <?php if (isset($_POST['update']) && $statement) { ?>
+                                    > <?php echo '<div class="alert alert-success" role="alert"> Succesfully Registered</div>' ?>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <hr class="featurette-divider">
                 <?php foreach ($account_details as $details) { ?>
+                    <?php $_SESSION['id'] = escape($details['customer_id']); ?>
                     <h4 class="text-white mb-0">First Name</h4>
                     <h5 class="text-muted"><?php echo $details['firstname'] ?></h5>
                     <h4 class="text-white mb-0">Surname</h4>
