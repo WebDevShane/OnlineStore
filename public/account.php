@@ -5,21 +5,28 @@ require "../lib/functions.php";
 require "../data/config.php";
 $account_details = get_customer($_SESSION['Email']);
 $all_orders = get_orders($_SESSION['Email']);
+$error2 = "";
 
 if (isset($_POST['update'])) {
     try {
         $connection = new PDO($dsn, $username, $password, $options);
 
+        $validate1 = $_POST['email'];
+        if (!filter_var($validate, FILTER_VALIDATE_EMAIL)) {
+            $error2 = "Invalid email";
+        } else {
+            $validate1 = $_POST['email'];
+        }
         $user_update = [
-            'firstname'     => $_POST['firstname'],
-            'lastname'      => $_POST['lastname'],
-            'email'         => $_POST['email'],
-            'address1'      => $_POST['address1'],
-            'address2'      => $_POST['address2'],
-            'city'          => $_POST['city'],
-            'country'       => $_POST['country'],
-            'eircode'       => $_POST['eircode'],
-            'userId'        => $_SESSION['id']
+            'firstname'     => test_data($_POST['firstname']),
+            'lastname'      => test_data($_POST['lastname']),
+            'email'         => test_data($validate1),
+            'address1'      => test_data($_POST['address1']),
+            'address2'      => test_data($_POST['address2']),
+            'city'          => test_data($_POST['city']),
+            'country'       => test_data($_POST['country']),
+            'eircode'       => test_data($_POST['eircode']),
+            'userId'        => test_data($_SESSION['id'])
         ];
 
         $sql = 'UPDATE customers 
@@ -35,7 +42,6 @@ if (isset($_POST['update'])) {
 
 
         $statement = $connection->prepare($sql);
-        // $statement->bindParam(':session_email', $acc_email, PDO::PARAM_STR);
         $statement->execute($user_update);
     } catch (PDOException $error) {
         echo $sql . "<br>" . $error->getMessage();
@@ -77,35 +83,36 @@ if (isset($_POST['delete'])) {
 
                                     <div class="mb-3">
                                         <label for="firstname" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" name="firstname" id="firstname">
+                                        <input type="text" class="form-control" name="firstname" id="firstname" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="lastname" id="lastname">
+                                        <input type="text" class="form-control" name="lastname" id="lastname" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email">
+                                        <input type="email" class="form-control" name="email" id="email" required>
+                                        <span class="text-danger"><?php echo $error2; ?></span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="address1" class="form-label">Address</label>
-                                        <input type="text" class="form-control" name="address1" id="address1" placeholder="Apartment, studio, or floor">
+                                        <input type="text" class="form-control" name="address1" id="address1" placeholder="Apartment, studio, or floor" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="address2" class="form-label">Address 2</label>
-                                        <input type="text" class="form-control" name="address2" id="address2" placeholder="1234 Main St...">
+                                        <input type="text" class="form-control" name="address2" id="address2" placeholder="1234 Main St..." required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="city" class="form-label">City</label>
-                                        <input type="text" class="form-control" name="city" id="city">
+                                        <input type="text" class="form-control" name="city" id="city" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" name="country" id="country">
+                                        <input type="text" class="form-control" name="country" id="country" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="eircode" class="form-label">Zip/Eircode</label>
-                                        <input type="text" class="form-control" name="eircode" id="eircode">
+                                        <input type="text" class="form-control" name="eircode" id="eircode" required>
                                     </div>
 
 
@@ -119,27 +126,27 @@ if (isset($_POST['delete'])) {
                     </div>
                 </form>
                 <?php if (isset($_POST['update']) && $statement) { ?>
-                    > <?php echo '<div class="alert alert-success" role="alert">Acoount Updated</div>' ?>
+                    > <?php echo '<div class="alert alert-success" role="alert">Account Updated</div>' ?>
                 <?php } ?>
                 <hr class="featurette-divider">
                 <?php foreach ($account_details as $details) { ?>
                     <?php $_SESSION['id'] = escape($details['customer_id']); ?>
                     <h4 class="text-white mb-0">First Name</h4>
-                    <h5 class="text-muted"><?php echo $details['firstname'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['firstname']); ?></h5>
                     <h4 class="text-white mb-0">Surname</h4>
-                    <h5 class="text-muted"><?php echo $details['lastname'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['lastname']); ?></h5>
                     <h4 class="text-white mb-0">Email</h4>
-                    <h5 class="text-muted"><?php echo $details['email'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['email']); ?></h5>
                     <h4 class="text-white mb-0">Address</h4>
-                    <h5 class="text-muted"><?php echo $details['address1'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['address1']); ?></h5>
                     <h4 class="text-white mb-0">Address 2</h4>
-                    <h5 class="text-muted"><?php echo $details['address2'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['address2']); ?></h5>
                     <h4 class="text-white mb-0">City</h4>
-                    <h5 class="text-muted"><?php echo $details['city'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['city']); ?></h5>
                     <h4 class="text-white mb-0">Country</h4>
-                    <h5 class="text-muted"><?php echo $details['country'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['country']); ?></h5>
                     <h4 class="text-white mb-0">Eircode/Post Code</h4>
-                    <h5 class="text-muted"><?php echo $details['eircode'] ?></h5>
+                    <h5 class="text-muted"><?php echo escape($details['eircode']); ?></h5>
                     <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal2">Delete Account</button>
                 <?php } ?>
                 <form method="post">
