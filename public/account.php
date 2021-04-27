@@ -3,9 +3,10 @@ $title = "Gameware Account";
 require_once "../includes/header.php";
 require "../lib/functions.php";
 require "../data/config.php";
-$account_details = get_customer($_SESSION['Email']);
+$account_details = get_customer($_SESSION['UserId']);
 $all_orders = get_orders($_SESSION['Email']);
 $error2 = "";
+$validate = "";
 
 if (isset($_POST['update'])) {
     try {
@@ -26,7 +27,7 @@ if (isset($_POST['update'])) {
             'city'          => test_data($_POST['city']),
             'country'       => test_data($_POST['country']),
             'eircode'       => test_data($_POST['eircode']),
-            'userId'        => test_data($_SESSION['id'])
+            'userId'        => test_data($_SESSION['UserId'])
         ];
 
         $sql = 'UPDATE customers 
@@ -130,7 +131,6 @@ if (isset($_POST['delete'])) {
                 <?php } ?>
                 <hr class="featurette-divider">
                 <?php foreach ($account_details as $details) { ?>
-                    <?php $_SESSION['id'] = escape($details['customer_id']); ?>
                     <h4 class="text-white mb-0">First Name</h4>
                     <h5 class="text-muted"><?php echo escape($details['firstname']); ?></h5>
                     <h4 class="text-white mb-0">Surname</h4>

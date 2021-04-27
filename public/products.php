@@ -33,7 +33,8 @@ $products = get_products();
                     <p class="lh-sm py-2">
                         <?php echo escape($product['product_fullDesc']); ?>
                     </p>
-                    <a class="btn btn-outline-primary text-nowrap my-sm-2" href="#">Add to cart</a>
+                    <a class="btn btn-outline-primary text-nowrap my-sm-2 align-bottom" href="#">Add to cart</a>
+
                 </div>
             <?php } ?>
         </div>

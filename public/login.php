@@ -16,11 +16,11 @@ require "../lib/functions.php";
                     <h1 class="h3 mb-3 fw-normal text-white">Please sign in</h1>
                 </div>
                 <div class="col-9 form-floating">
-                    <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
+                    <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com" required>
                     <label for="floatingInput">Email address</label>
                 </div>
                 <div class="col-9 pt-2 form-floating">
-                    <input type="password" class="form-control" name="pass" id="floatingPassword" placeholder="Password">
+                    <input type="password" class="form-control" name="pass" id="floatingPassword" placeholder="Password" required>
                     <label for="floatingPassword">Password</label>
                 </div>
                 <div class="col checkbox pt-2 mb-3 text-white">
@@ -40,7 +40,7 @@ require "../lib/functions.php";
 
                             $connection = new PDO($dsn, $username, $password, $options);
 
-                            $sql = "SELECT firstname 
+                            $sql = "SELECT customer_id, firstname 
                                   FROM customers
                                   WHERE email = :email AND pass = :pass";
 
@@ -55,7 +55,8 @@ require "../lib/functions.php";
 
                             if ($result > 0) {
                                 $arr = array_values($result);
-                                $_SESSION['Username'] = $arr[0];
+                                $_SESSION['UserId'] = $arr[0];
+                                $_SESSION['Username'] = $arr[1];
                                 $_SESSION['Email'] = $email;
                                 header("location:index.php");
                                 exit;

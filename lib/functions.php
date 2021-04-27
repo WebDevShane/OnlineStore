@@ -33,7 +33,7 @@ function get_products()
     try {
         $connection = new PDO($dsn, $username, $password, $options);
 
-        $sql = 'SELECT * FROM products';
+        $sql = 'SELECT * FROM products ORDER BY product_id ASC';
 
         $stmt = $connection->prepare($sql);
         $stmt->execute();
@@ -45,17 +45,17 @@ function get_products()
     }
 }
 
-function get_customer($account_email)
+function get_customer($account_id)
 {
     require "../data/config.php";
     try {
         $connection = new PDO($dsn, $username, $password, $options);
 
-        $sql = 'SELECT * FROM customers WHERE email = :acc_email';
+        $sql = 'SELECT * FROM customers WHERE customer_id = :acc_id';
 
-        $acc_email = $account_email;
+        $acc_id = $account_id;
         $stmt = $connection->prepare($sql);
-        $stmt->bindParam(':acc_email', $acc_email, PDO::PARAM_STR);
+        $stmt->bindParam(':acc_id', $acc_id, PDO::PARAM_STR);
         $stmt->execute();
         $customer = $stmt->fetchAll();
 
@@ -93,7 +93,7 @@ function delete_account()
     try {
         $connection = new PDO($dsn, $username, $password, $options);
 
-        $userId = $_SESSION['id'];
+        $userId = $_SESSION['UserId'];
         $sql = 'DELETE FROM customers WHERE customer_id = :userId';
 
 
